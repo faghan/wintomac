@@ -1,0 +1,1 @@
+default_app_config = 'data_broker.data_warehouse.apps.DataWarehouseConfig'

@@ -1,0 +1,77 @@
+[
+    {
+        "sync": "proteomics",
+        "setup": [
+            "main:prot123/blank01.raw",
+            "main:prot123/Prot17_12.raw"
+        ],
+        "setup_actions": [
+            {
+                "call": "touch",
+                "destination": "${MAIN}/prot123/blank01.raw",
+                "age": 0
+            }
+        ],
+        "events": [
+            {
+                "template": "login"
+            },
+            {
+                "template": "list_md5s",
+                "destination": "PROT123"
+            },
+            {
+                "template": "copy",
+                "source": "${MAIN}/prot123/Prot17_12.raw",
+                "destination": "PROT123/samples/Prot17_12.raw"
+            },
+            {
+                "template": "list_md5s",
+                "destination": "PROT123"
+            },
+            {
+                "template": "logout"
+            }
+        ],
+        "return_code": 0
+    },
+    {
+        "sync": "proteomics",
+        "setup": [],
+        "setup_actions": [
+            {
+                "call": "touch",
+                "destination": "${MAIN}/prot123/blank01.raw",
+                "age": 48
+            }
+        ],
+        "events": [
+            {
+                "template": "login"
+            },
+            {
+                "template": "list_md5s",
+                "destination": "PROT123"
+            },
+            {
+                "template": "copy",
+                "source": "${MAIN}/prot123/blank01.raw",
+                "destination": "PROT123/blanks/blank01.raw"
+            },
+            {
+                "template": "list_md5s",
+                "destination": "PROT123"
+            },
+            {
+                "template": "logout"
+            }
+        ],
+        "return_code": 0
+    },
+    {
+        "sync": "proteomics",
+        "setup": [],
+        "events": [],
+        "return_code": 0
+    }
+]

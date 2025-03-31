@@ -1,0 +1,61 @@
+{
+    "miseq-sync": {
+        "commands": [
+            [
+                "~/utils/datalake-sync",
+                "ngs",
+                "~/config/miseq-sync/",
+                "/net/"
+            ]
+        ],
+        "pid": "bulk-transfer"
+    },
+    "nextseq-sync": {
+        "commands": [
+            [
+                "~/utils/datalake-sync",
+                "ngs",
+                "~/config/nextseq-sync/",
+                "/net/"
+            ]
+        ],
+        "pid": "bulk-transfer"
+    },
+    "proteomics-sync": {
+        "commands": [
+            [
+                "~/utils/datalake-sync",
+                "proteomics",
+                "~/config/proteomics-sync/",
+                "/net/"
+            ]
+        ],
+        "pid": "bulk-transfer"
+    },
+    "monitor-ncbi-mappings": {
+        "commands": [
+            [
+                "~/utils/monitor-ncbi-mappings",
+                "~/config/monitor-ncbi-mappings/",
+                "~/cache/monitor-ncbi-mappings/"
+            ]
+        ]
+    },
+    "monitor-proteomics": {
+        "commands": [
+            [
+                "~/utils/monitor-proteomics",
+                "~/config/monitor-proteomics/",
+                "/net/"
+            ]
+        ]
+    },
+    "incyght-sync": {
+        "commands": [
+            [
+                "~/utils/incyght-sync",
+                "~/config/incyght-sync"
+            ]
+        ]
+    }
+}

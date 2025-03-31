@@ -1,0 +1,89 @@
+[
+    {
+        "sync": "proteomics",
+        "setup": [
+            "main:prot123/metadata.xlsx",
+            "main:prot123/results.xlsx"
+        ],
+        "events": [
+            {
+                "template": "login"
+            },
+            {
+                "template": "list_md5s",
+                "destination": "PROT123"
+            },
+            {
+                "template": "copy",
+                "source": "${MAIN}/prot123/metadata.xlsx",
+                "destination": "PROT123/metadata.xlsx"
+            },
+            {
+                "template": "copy",
+                "source": "${MAIN}/prot123/results.xlsx",
+                "destination": "PROT123/results.xlsx"
+            },
+            {
+                "template": "list_md5s",
+                "destination": "PROT123"
+            },
+            {
+                "template": "get_md5",
+                "filename": "PROT123/results.ready"
+            },
+            {
+                "template": "copy",
+                "source": "${FILENAME}",
+                "destination": "PROT123/results.ready"
+            },
+            {
+                "template": "get_md5",
+                "filename": "PROT123/results.ready"
+            },
+            {
+                "template": "logout"
+            }
+        ],
+        "return_code": 0
+    },
+    {
+        "sync": "proteomics",
+        "setup": [
+            "main:prot123/blank01.raw",
+            "main:prot123/Prot17_12.raw"
+        ],
+        "events": [
+            {
+                "template": "login"
+            },
+            {
+                "template": "list_md5s",
+                "destination": "PROT123"
+            },
+            {
+                "template": "copy",
+                "source": "${MAIN}/prot123/blank01.raw",
+                "destination": "PROT123/blanks/blank01.raw"
+            },
+            {
+                "template": "copy",
+                "source": "${MAIN}/prot123/Prot17_12.raw",
+                "destination": "PROT123/samples/Prot17_12.raw"
+            },
+            {
+                "template": "list_md5s",
+                "destination": "PROT123"
+            },
+            {
+                "template": "logout"
+            }
+        ],
+        "return_code": 0
+    },
+    {
+        "sync": "proteomics",
+        "setup": [],
+        "events": [],
+        "return_code": 0
+    }
+]

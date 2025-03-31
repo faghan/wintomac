@@ -1,0 +1,32 @@
+[
+    {
+        "sync": "nextseq",
+        "setup": [
+            "main:200903_M02023_0574_000000000-J7GJ3/RunInfo.xml",
+            "main:200903_M02023_0574_000000000-J7GJ3/runParameters.xml",
+            "alt:200903_M02023_0574_000000000-J7GJ3.csv"
+        ],
+        "events": [
+            {
+                "template": "login"
+            },
+            {
+                "template": "get_md5",
+                "filename": "200903_M02023_0574_000000000-J7GJ3/SampleSheet.csv"
+            },
+            {
+                "template": "copy",
+                "source": "${ALT}/200903_M02023_0574_000000000-J7GJ3.csv",
+                "destination": "200903_M02023_0574_000000000-J7GJ3/SampleSheet.csv"
+            },
+            {
+                "template": "get_md5",
+                "filename": "200903_M02023_0574_000000000-J7GJ3/SampleSheet.csv"
+            },
+            {
+                "template": "logout"
+            }
+        ],
+        "return_code": 0
+    }
+]

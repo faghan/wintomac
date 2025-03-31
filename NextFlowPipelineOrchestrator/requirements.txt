@@ -1,0 +1,16 @@
+azure-identity
+azure-mgmt-compute==32.0.0
+azure-mgmt-network==26.0.0
+azure-mgmt-resource==23.2.0
+python-dotenv==1.0.1
+azure-mgmt-keyvault
+azure-keyvault==4.2.0
+azure-mgmt-authorization
+azure-mgmt-msi==7.0.0
+cryptography==43.0.3
+azure-mgmt-storage==21.2.1
+azure-storage-blob==12.24.0
+azure-mgmt-batch==18.0.0
+# azure-mgmt-identity
+paramiko==3.5.0
+azure-storage-blob

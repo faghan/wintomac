@@ -1,0 +1,31 @@
+{
+    "sleep10": {
+        "commands": [
+            [
+                "sleep",
+                "10"
+            ]
+        ],
+        "pid": "mypid"
+    },
+    "sleep1": {
+        "commands": [
+            [
+                "sleep",
+                "1"
+            ]
+        ],
+        "pid": "mypid"
+    },
+    "failing_task": {
+        "commands": [
+            [
+                "false"
+            ],
+            [
+                "echo",
+                "This 'echo' is never run, because the previous command failed"
+            ]
+        ]
+    }
+}

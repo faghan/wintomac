@@ -1,0 +1,3 @@
+id,input_tumor,input_normal,input_index_tumor,input_index_normal,which_norm
+T_805,path/to/T_805.final.bam,path/to/N_805.final.bam,path/to/T_805.final.bam.bai,path/to/N_805.final.bam.bai,1
+T_806,path/to/T_806.final.bam,path/to/N_806.final.bam,path/to/T_806.final.bam.bai,path/to/N_806.final.bam.bai,1

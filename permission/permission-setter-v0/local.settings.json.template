@@ -1,0 +1,15 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+    "AzureWebJobsFeatureFlags": "EnableWorkerIndexing",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "AzureWebJobsSecretStorageType": "files",
+    "AzureWebJobsDisableHomepage": "true",
+    "AZURE_CLIENT_ID": "<client_id>",
+    "AZURE_CLIENT_SECRET": "<client_secret>",
+    "AZURE_TENANT_ID": "<tenant_id>",
+    "DATA_STORAGE_ACCOUNT": "biosustaindls",
+    "PYCHARM_DEBUG": "True",
+  }
+}

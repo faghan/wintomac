@@ -1,0 +1,4 @@
+/home/avmillumina/data-lake/ngs/avm-illumina-run/mount_nextseq01.sh           /nextseq01              fuse    _netdev
+/home/avmillumina/data-lake/ngs/avm-illumina-run/mount_miseq01.sh             /miseq01                fuse    _netdev
+/home/avmillumina/data-lake/ngs/avm-illumina-run/mount_samples.sh             /samples                fuse    _netdev
+/home/avmillumina/data-lake/ngs/avm-illumina-run/mount_reference-genomes.sh   /reference-genomes      fuse    _netdev

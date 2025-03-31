@@ -1,0 +1,14 @@
+[requires]
+python_version = "3.11"
+
+[packages]
+azure-functions = "*"
+azure-identity = "*"
+msgraph-sdk = "*"
+azure-storage-file-datalake = "*"
+requests = "*"
+marshmallow = "*"
+
+[dev-packages]
+pytest = "*"
+mock = "*"

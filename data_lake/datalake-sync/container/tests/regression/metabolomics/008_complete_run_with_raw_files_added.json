@@ -1,0 +1,100 @@
+[
+    {
+        "sync": "metabolomics",
+        "setup": [
+            "main:RawData_B/20200831/20200618_Source_Scanrange_Waste_Solvent_80_MeOH.sld.csv",
+            "main:RawData_B/20200831/20200618_Blank_NewSourceSettings_80_20MeOH_water_HighMass_POS_1.raw",
+            "main:DataProcessingMethod_B/CHEMISTRY/yeastGEM_mapping.tsv",
+            "main:DataProcessingMethod_B/CHEMISTRY/yeastGEM_struct.tsv",
+            "main:DataProcessingMethod_B/parameters.csv",
+            "main:DataProcessingMethod_B/sequence.csv",
+            "main:DataProcessingMethod_B/traML.csv"
+        ],
+        "events": [
+            {
+                "template": "login"
+            },
+            {
+                "template": "list_md5s",
+                "destination": "B/20200831"
+            },
+            {
+                "template": "copy",
+                "source": "${MAIN}/DataProcessingMethod_B/CHEMISTRY/yeastGEM_mapping.tsv",
+                "destination": "B/20200831/CHEMISTRY/yeastGEM_mapping.tsv"
+            },
+            {
+                "template": "copy",
+                "source": "${MAIN}/DataProcessingMethod_B/CHEMISTRY/yeastGEM_struct.tsv",
+                "destination": "B/20200831/CHEMISTRY/yeastGEM_struct.tsv"
+            },
+            {
+                "template": "copy",
+                "source": "${MAIN}/DataProcessingMethod_B/parameters.csv",
+                "destination": "B/20200831/parameters.csv"
+            },
+            {
+                "template": "copy",
+                "source": "${MAIN}/RawData_B/20200831/20200618_Blank_NewSourceSettings_80_20MeOH_water_HighMass_POS_1.raw",
+                "destination": "B/20200831/raw/20200618_Blank_NewSourceSettings_80_20MeOH_water_HighMass_POS_1.raw"
+            },
+            {
+                "template": "copy",
+                "source": "${MAIN}/RawData_B/20200831/20200618_Source_Scanrange_Waste_Solvent_80_MeOH.sld.csv",
+                "destination": "B/20200831/raw/20200618_Source_Scanrange_Waste_Solvent_80_MeOH.sld.csv"
+            },
+            {
+                "template": "copy",
+                "source": "${MAIN}/DataProcessingMethod_B/sequence.csv",
+                "destination": "B/20200831/sequence.csv"
+            },
+            {
+                "template": "copy",
+                "source": "${MAIN}/DataProcessingMethod_B/traML.csv",
+                "destination": "B/20200831/traML.csv"
+            },
+            {
+                "template": "list_md5s",
+                "destination": "B/20200831"
+            },
+            {
+                "template": "logout"
+            }
+        ],
+        "return_code": 0
+    },
+    {
+        "sync": "metabolomics",
+        "setup": [
+            "main:RawData_B/20200831/20200618_Blank_NewSourceSettings_80_20MeOH_water_HighMass_NEG_1.raw"
+        ],
+        "events": [
+            {
+                "template": "login"
+            },
+            {
+                "template": "list_md5s",
+                "destination": "B/20200831"
+            },
+            {
+                "template": "copy",
+                "source": "${MAIN}/RawData_B/20200831/20200618_Blank_NewSourceSettings_80_20MeOH_water_HighMass_NEG_1.raw",
+                "destination": "B/20200831/raw/20200618_Blank_NewSourceSettings_80_20MeOH_water_HighMass_NEG_1.raw"
+            },
+            {
+                "template": "list_md5s",
+                "destination": "B/20200831"
+            },
+            {
+                "template": "logout"
+            }
+        ],
+        "return_code": 0
+    },
+    {
+        "sync": "metabolomics",
+        "setup": [],
+        "events": [],
+        "return_code": 0
+    }
+]

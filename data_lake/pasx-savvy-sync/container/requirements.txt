@@ -1,0 +1,4 @@
+ConfigArgParse==1.5.3
+coloredlogs==15.0.1
+psycopg2-binary==2.9.3
+requests==2.27.1

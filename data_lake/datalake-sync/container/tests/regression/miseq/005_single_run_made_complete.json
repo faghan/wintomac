@@ -1,0 +1,58 @@
+[
+    {
+        "sync": "miseq",
+        "setup": [
+            "main:200903_M02023_0574_000000000-J7GJ3/InterOp/IndexMetricsOut.bin",
+            "main:200903_M02023_0574_000000000-J7GJ3/InterOp/QMetricsByLaneOut.bin",
+            "main:200903_M02023_0574_000000000-J7GJ3/InterOp/TileMetricsOut.bin",
+            "main:200903_M02023_0574_000000000-J7GJ3/RunInfo.xml",
+            "main:200903_M02023_0574_000000000-J7GJ3/runParameters.xml",
+            "main:200903_M02023_0574_000000000-J7GJ3/SampleSheet.csv"
+        ],
+        "events": [],
+        "return_code": 0
+    },
+    {
+        "sync": "miseq",
+        "setup": [
+            "main:200903_M02023_0574_000000000-J7GJ3/RTAComplete.txt"
+        ],
+        "events": [
+            {
+                "template": "login"
+            },
+            {
+                "template": "sync",
+                "source": "${MAIN}/200903_M02023_0574_000000000-J7GJ3",
+                "destination": "200903_M02023_0574_000000000-J7GJ3"
+            },
+            {
+                "template": "list_md5s",
+                "destination": "200903_M02023_0574_000000000-J7GJ3"
+            },
+            {
+                "template": "get_md5",
+                "filename": "200903_M02023_0574_000000000-J7GJ3.sync"
+            },
+            {
+                "template": "copy",
+                "source": "${FILENAME}",
+                "destination": "200903_M02023_0574_000000000-J7GJ3.sync"
+            },
+            {
+                "template": "get_md5",
+                "filename": "200903_M02023_0574_000000000-J7GJ3.sync"
+            },
+            {
+                "template": "logout"
+            }
+        ],
+        "return_code": 0
+    },
+    {
+        "sync": "miseq",
+        "setup": [],
+        "events": [],
+        "return_code": 0
+    }
+]

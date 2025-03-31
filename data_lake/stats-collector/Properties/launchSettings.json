@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "datalake-stats": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

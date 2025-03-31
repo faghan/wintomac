@@ -1,0 +1,1 @@
+git archive --format=zip --output $PWD/azure-launch-pipeline.zip $(git rev-parse --abbrev-ref HEAD)

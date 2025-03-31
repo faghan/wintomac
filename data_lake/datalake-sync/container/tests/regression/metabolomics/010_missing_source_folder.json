@@ -1,0 +1,14 @@
+[
+    {
+        "sync": "metabolomics",
+        "setup": [],
+        "events": [],
+        "return_code": 1,
+        "setup_actions": [
+            {
+                "call": "rmdir",
+                "destination": "${MAIN}"
+            }
+        ]
+    }
+]

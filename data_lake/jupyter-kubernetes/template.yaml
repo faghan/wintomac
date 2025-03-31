@@ -1,0 +1,111 @@
+# Helm Chart for JupyterHub for Kubernetes
+# https://zero-to-jupyterhub.readthedocs.io/en/latest/reference/reference.html
+
+proxy:
+  https:
+    enabled: true
+    hosts:
+      - cfbjupyter.northeurope.cloudapp.azure.com
+    letsencrypt:
+      contactEmail: ...
+
+imagePullSecret:
+  create: true
+  registry: "cfbregistry.azurecr.io"
+  username: "cfbregistry"
+  password: "..."
+
+singleuser:
+  image:
+    name: "cfbregistry.azurecr.io/jupyterhub"
+    tag: "8dfd034"
+  defaultUrl: "/lab"
+
+  lifecycleHooks:
+    postStart:
+      exec:
+        command: ["/container/setup.sh"]
+
+  storage:
+    # Default user storage (StandardSSD_LRS); can be resized per user via the portal
+    capacity: 4Gi
+
+  # Resource guarantees and limits per user. If guarantees cannot be met on existing
+  # nodes, a new node is created by the autoscaler. Used by real and placeholder users.
+  cpu:
+    limit: 2
+    guarantee: 0.25
+  memory:
+    limit: 4G
+    guarantee: 512M
+
+hub:
+  extraConfig:
+    # Use the User Principal Name to name users
+    00-azuread: |
+      c.AzureAdOAuthenticator.username_claim = "upn"
+    # The jupyter/datascience-notebook image is large and takes several minutes to pull.
+    # When added to node provisioning times, this can cause timeouts during login.
+    # Typical times seem to be 500 to 600 seconds (default = 300 seconds).
+    # See `kubectl logs ${NAME_OF_HUB} | grep "seconds to start"`
+    #
+    # Due to issue IN-350, this is currently disabled, so that users won't have to wait
+    # 15 minutes if the initial pawn silently fails. Additional placeholder users have
+    # been added to try to mitigate the problem this was originally meant to solve.
+    #
+    # 01-kubespawner: |
+    #  c.KubeSpawner.start_timeout = 900
+    # Uncomment to enable more verbose logging
+    # 02-kubespawner-log-level: |
+    #   c.JupyterHub.log_level = "DEBUG"
+  config:
+  # User authentication
+  # https://zero-to-jupyterhub.readthedocs.io/en/latest/administrator/authentication.html
+    Authenticator:
+    # Grant listed control over (and optional access to) running notebooks:
+    # https://zero-to-jupyterhub.readthedocs.io/en/stable/administrator/authentication.html#allowed-users-admin-users
+      admin_users:
+      # List of admin users
+      - emoz@win.dtu.dk
+      - emoz@dtu.dk
+      - lemad@dtu.dk
+  # Authentication using Azure Active Directory service (see comments in README.md):
+  # https://zero-to-jupyterhub.readthedocs.io/en/latest/administrator/authentication.html#azure-active-directory
+    AzureAdOAuthenticator:
+      client_id: 8b4898c4-d4ba-46db-a2b7-5338bde538dd
+      client_secret: ...
+      oauth_callback_url: https://cfbjupyter.northeurope.cloudapp.azure.com/hub/oauth_callback
+      tenant_id: f251f123-c9ce-448e-9277-34bb285911d9
+    JupyterHub:
+      # Admin users should not be able to access user notebooks
+      admin_access: false
+      authenticator_class: azuread
+
+# Scheduling and auto-scaling
+# https://zero-to-jupyterhub.readthedocs.io/en/latest/administrator/optimization.html
+scheduling:
+  userScheduler:
+    enabled: true
+  # Allow eviction of placeholder users when a real user logs in
+  podPriority:
+    enabled: true
+  # Placeholder users ensure that there is headspace to handle N additional users. Each
+  # placeholder user reserves the same amount of resouces as a real user, triggering
+  # the creation of additional nodes as needed.
+  userPlaceholder:
+    enabled: true
+    # Change on the fly with `kubectl scale sts/user-placeholder --replicas=3`
+    replicas: 3
+  userPods:
+    nodeAffinity:
+      # `prefer` or `require` nodes with designating for user pods (see `README.md`)
+      matchNodePurpose: prefer
+
+# Automatic culling of inactive user pods:
+# https://zero-to-jupyterhub.readthedocs.io/en/latest/customizing/user-management.html#culling-user-pods
+cull:
+  enabled: true
+  # Check for inactive user pods every 5 minutes:
+  every: 300
+  # Time out  inactive user pods after 1 hour of inactivity:
+  timeout: 3600

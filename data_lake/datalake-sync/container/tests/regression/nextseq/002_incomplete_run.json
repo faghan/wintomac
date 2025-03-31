@@ -1,0 +1,11 @@
+[
+    {
+        "sync": "nextseq",
+        "setup": [
+            "main:200903_M02023_0574_000000000-J7GJ3/RunInfo.xml",
+            "main:200903_M02023_0574_000000000-J7GJ3/runParameters.xml"
+        ],
+        "events": [],
+        "return_code": 0
+    }
+]

@@ -1,0 +1,5 @@
+azure-batch==13.0.0
+azure-common==1.1.28
+azure-core==1.26.4
+python-dateutil==2.8.2
+msrestazure==0.6.4

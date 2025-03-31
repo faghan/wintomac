@@ -1,0 +1,16 @@
+# Sync of NGS data
+0 1-23 * * * ~/utils/cronbeat run ~/utils/cronbeat.json miseq-sync
+20 1-23 * * * ~/utils/cronbeat run ~/utils/cronbeat.json nextseq-sync
+40 1-23 * * * ~/utils/cronbeat run ~/utils/cronbeat.json proteomics-sync
+
+# Sync of InCyght data to the DWH
+20 0 * * * ~/utils/cronbeat run ~/utils/cronbeat.json incyght-sync
+# Check for updates of the Uniprot-to-NCBI accession number mappings
+40 0 * * * ~/utils/cronbeat run ~/utils/cronbeat.json monitor-ncbi-mappings
+# Check for incomplete proteomics requests every Monday at 8:00
+0 8  * * 1 ~/utils/cronbeat run ~/utils/cronbeat.json monitor-proteomics
+
+# Send summary of tasks to Microsoft teams
+0 0 * * * ~/utils/cronbeat emit
+
+0 0 1 * * docker system prune -a -f --filter "until=720h"

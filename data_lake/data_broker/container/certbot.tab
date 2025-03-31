@@ -1,0 +1,2 @@
+0 */12 * * * certbot renew --deploy-hook /broker/letsencrypt.sh
+# Mandatory empty line

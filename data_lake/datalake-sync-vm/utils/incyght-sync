@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -o nounset # Fail on unset variables
+set -o errexit # Fail on uncaught non-zero returncodes
+set -o pipefail # Fail is a command in a chain of pipes fails
+
+if [ $# -ne 1 ];
+then
+    echo "Usage:" > /dev/stderr
+    echo "\$ $0 <command> /path/to/config/" > /dev/stderr
+
+    exit 1
+elif [ ! -e "$1/config.ini" ];
+then
+    echo "'$1/config.ini' not found" > /dev/stderr
+
+    exit 1
+fi
+
+# The login-token lasts 3 hours, so it is necessary to login before every task
+az acr login --name cfbregistry --resource-group rg-cfb-common
+
+# `-u` causes problems with odbc and is therefore not used here
+docker run --rm --interactive \
+    -v "$1:/config" \
+    cfbregistry.azurecr.io/incyght-sync:TAG \
+    --config /config/config.ini

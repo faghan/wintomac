@@ -1,0 +1,32 @@
+#!/bin/bash
+
+set -o nounset # Fail on unset variables
+set -o errexit # Fail on uncaught non-zero returncodes
+set -o pipefail # Fail is a command in a chain of pipes fails
+
+if [ $# -ne 3 ];
+then
+    echo "Usage:" > /dev/stderr
+    echo "\$ $0 <command> /path/to/config/ /path/to/data/" > /dev/stderr
+    echo > /dev/stderr
+    echo "/path/to/config is accessible at /config" > /dev/stderr
+    echo "/path/to/data is accessible at /data" > /dev/stderr
+    exit 1
+elif [ ! -e "$2/config.ini" ];
+then
+    echo "'$2/config.ini' not found" > /dev/stderr
+
+    exit 1
+fi
+
+# The login-token lasts 3 hours, so it is necessary to login before every task
+az acr login --name cfbregistry --resource-group rg-cfb-common
+
+# The `:shared` option is required when using an AutoFS mount-point as /data
+# The `-u` option ensures that files created in /config are owned by the current user
+# The `--security-opt` option is needed to whitelist `keyctl`, required by azcopy
+docker run --rm --interactive -u "$(id -u):$(id -g)" \
+    --security-opt seccomp=~/utils/seccomp_profile.json \
+    -v "$2:/config" \
+    -v "$3:/data:shared" \
+    cfbregistry.azurecr.io/datalake-sync:TAG $1

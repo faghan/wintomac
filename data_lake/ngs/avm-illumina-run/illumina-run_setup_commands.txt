@@ -1,0 +1,84 @@
+## For Ubuntu 20.04 LTS VM
+
+## Set up blob drive mounting
+# from https://techcommunity.microsoft.com/t5/azure-paas-blog/mount-blob-storage-on-linux-vm-using-managed-identities-or/ba-p/1821744?WT.mc_id=modinfra-0000-abartolo
+# Install repository configuration
+wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
+
+# Install Microsoft's GPG public key
+curl -sSL https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+sudo apt-add-repository https://packages.microsoft.com/ubuntu/20.04/prod
+sudo apt-get update
+
+## Install necessary packages and preferred editor
+sudo apt-get install blobfuse fuse git emacs libxslt-dev -y
+
+## adapted from https://docs.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-ver15#microsoft-odbc-driver-17-for-sql-server  - there are a couple of steps to include packages list that is handles with the stuff above.
+sudo ACCEPT_EULA=Y apt-get install msodbcsql17 -y
+echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile
+echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
+source ~/.bashrc
+# optional: for unixODBC development headers
+sudo apt-get install unixodbc-dev -y
+
+## generate ssh key and add it to github keys
+ssh-keygen -t rsa -b 4096 -C avmillumina@avm-illumina-run
+ssh-add ~/.ssh/id_rsa
+cat ~/.ssh/id_rsa.pub
+# copy the output and add it here: https://github.com/settings/keys
+
+## Access to storage
+# clone data-lake repository that should have the required libraries and blobfuse files.
+# will require an account with access to repo.
+git clone --recurse-submodules https://github.com/biosustain/data-lake.git
+
+## Use SSD as temporary path - avmillumina is chosen as user name while setting the VM up.
+sudo mkdir /mnt/resource/blobfusetmp -p
+sudo chown avmillumina /mnt/resource/blobfusetmp
+
+## Mounting
+# for this part to work, you will need to give the VM system identity access to storage blobs with "storage blob contributor" access.
+# create mount point
+sudo mkdir /nextseq01 /miseq01 /reference-genomes /samples
+sudo chown avmillumina /nextseq01 /miseq01 /reference-genomes /samples
+
+# MANUAL - add the lines in append_to_etc_fstab to /etc/fstab
+cat data-lake/ngs/avm-illumina-run/append_to_etc_fstab | sudo tee -a /etc/fstab
+
+
+## Note - you might need to make sure bashrc is executed with ssh login.
+#add the following lines to .bash_profile, uncomment last 3 lines.
+# Get the aliases and functions
+#if [ -f ~/.bashrc ]; then
+#	. ~/.bashrc
+#fi
+
+## conda, bcl2fastq2 and library sheet converter
+cd ~
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+chmod +x Miniconda3-latest-Linux-x86_64.sh
+./Miniconda3-latest-Linux-x86_64.sh
+# if you said "yes" to everything, conda base environment should be active with shell login.
+# so log out and log back in.
+conda install -c bih-cubi bcl2fastq2
+# also adding the library_to_samplesheet (and dependencies) here. this might be installed by the line below.
+pip install ~/data-lake/ngs/library_to_samplesheet
+
+conda install python=3.7
+conda install pyodbc pyyaml psycopg2
+conda install -c bioconda -conda-forge snakemake=5.28
+pip install pymsteams
+
+# Manual
+# install packages required for the ngs reports
+conda install -c conda-forge reportlab matplotlib svglib xlsxwriter
+pip install ~/data-lake/ngs_reports
+
+# Install azure-cli based on https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-apt
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+# and login to azure once
+az login --identity
+# you'll also need access policy added for this part to work:
+# https://docs.microsoft.com/en-us/azure/key-vault/general/assign-access-policy-portal

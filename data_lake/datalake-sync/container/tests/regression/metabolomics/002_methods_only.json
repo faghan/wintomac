@@ -1,0 +1,13 @@
+[
+    {
+        "sync": "metabolomics",
+        "setup": [
+            "main:DataProcessingMethod_A/featureQCComponentGroups.csv",
+            "main:DataProcessingMethod_A/featureQCComponents.csv",
+            "main:DataProcessingMethod_A/sequence.csv",
+            "main:DataProcessingMethod_A/traML.csv"
+        ],
+        "events": [],
+        "return_code": 0
+    }
+]

@@ -1,0 +1,4 @@
+coloredlogs==14.0
+ConfigArgParse==1.2.3
+requests==2.25.0
+humanfriendly==9.0

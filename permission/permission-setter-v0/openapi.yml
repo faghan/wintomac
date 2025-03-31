@@ -1,0 +1,391 @@
+openapi: 3.0.3
+info:
+  title: Permission setter
+  description: |
+    This is convinience utility to set Biosustain datalake file/folder permissions based on email addresses.
+    You can find out more about this service at [Biosustain RDM's Confluence Page](https://biosustain-dev.atlassian.net/wiki/x/BQA_fw).
+
+  contact:
+    name: Project Team
+    email: provenance@dtudk.onmicrosoft.com
+
+  version: 0.0.1
+externalDocs:
+  description: Service documentation
+  url: https://biosustain-dev.atlassian.net/wiki/x/BQA_fw
+servers:
+  - url: https://func-permission-setter-dev-001.azurewebsites.net/api
+  - url: http://localhost:7071/api
+tags:
+  - name: acl
+    description: Set permissions for a file/folder
+  - name: debug
+    description: Debugging endpoints
+paths:
+  /acl:
+    get:
+      tags:
+        - acl
+      description: Get (email based) ACL for a file/folder
+      operationId: getAcl
+      parameters:
+        - name: container
+          in: query
+          description: Container name
+          required: true
+          schema:
+            type: string
+          example: 'sandbox'
+        - name: path
+          in: query
+          description: Path to the file/folder
+          required: true
+          schema:
+            type: string
+          example: 'permission-setter-test'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: ACL for the file/folder
+        '400':
+          description: |
+            Bad request - returned when input parameters hasn't been properly formated.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                description: JSON object with error details
+        '401':
+          description: Unauthorized - returned when the user is not authorized to access the resource/perform action
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: Error message
+        '404':
+          description: Not found - returned when the requested resource (file/dictionary) is not found
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: Error message
+        '500':
+          description: Internal server error
+    put:
+      tags:
+        - acl
+      description: Set (email based) ACL for a file/folder
+      operationId: setAcl
+      parameters:
+        - name: container
+          in: query
+          description: Container name
+          required: true
+          schema:
+            type: string
+          example: 'sandbox'
+        - name: path
+          in: query
+          description: Path to the file/folder
+          required: true
+          schema:
+            type: string
+          example: 'permission-setter-test'
+        - name: acl
+          in: query
+          description: Email based ACL
+          required: true
+          schema:
+            type: string
+          example: 'user:test@test.test:rwx,group::r--,other::r--'
+        - name: recursive
+          in: query
+          description: Set ACL recursively
+          required: false
+          schema:
+            type: boolean
+          example: false
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/AclChangeResponse'
+                  - $ref: '#/components/schemas/AclChangeRecursiveResponse'
+        '400':
+          description: |
+            Bad request - returned when input parameters hasn't been properly formated.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                description: JSON object with error details
+        '401':
+          description: Unauthorized - returned when the user is not authorized to access the resource/perform action
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: Error message
+        '404':
+          description: Not found - returned when the requested resource (file/dictionary) is not found
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: Error message
+        '500':
+          description: Internal server error
+    patch:
+      tags:
+        - acl
+      description: Update (email based) ACL for a file/folder and its children
+      operationId: updateAcl
+      parameters:
+        - name: container
+          in: query
+          description: Container name
+          required: true
+          schema:
+            type: string
+          example: 'sandbox'
+        - name: path
+          in: query
+          description: Path to the file/folder
+          required: true
+          schema:
+            type: string
+          example: 'permission-setter-test'
+        - name: acl
+          in: query
+          description: Email based ACL
+          required: true
+          schema:
+            type: string
+          example: 'user:test@test.test:rwx,group::r--,other::r--'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AclChangeRecursiveResponse'
+        '400':
+          description: |
+            Bad request - returned when input parameters hasn't been properly formated.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                description: JSON object with error details
+        '401':
+          description: Unauthorized - returned when the user is not authorized to access the resource/perform action
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: Error message
+        '404':
+          description: Not found - returned when the requested resource (file/dictionary) is not found
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: Error message
+        '500':
+          description: Internal server error
+  # Debugging endpoints
+  /get_user_id:
+    get:
+      tags:
+        - debug
+      description: Get user id
+      operationId: getUserId
+      parameters:
+        - name: email
+          in: query
+          description: Email address
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: User id
+        '400':
+          description: |
+            Bad request - returned when input parameters hasn't been properly formated.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                description: JSON object with error details
+        '401':
+          description: Unauthorized - returned when the user is not authorized to access the resource/perform action
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: Error message
+        '404':
+          description: Not found - returned when the requested resource (file/dictionary) is not found
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: Error message
+        '500':
+          description: Internal server error
+  /me:
+    get:
+      tags:
+        - debug
+      description: Get user info
+      operationId: me
+      responses:
+        '200':
+          description: successful operation
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: User Id
+        '400':
+          description: |
+            Bad request - returned when input parameters hasn't been properly formated.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                description: JSON object with error details
+        '401':
+          description: Unauthorized - returned when the user is not authorized to access the resource/perform action
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: Error message
+        '404':
+          description: Not found - returned when the requested resource (file/dictionary) is not found
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: Error message
+        '500':
+          description: Internal server error
+  /health:
+    get:
+      tags:
+        - debug
+      description: Health check
+      operationId: health
+      responses:
+        '200':
+          description: successful operation
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: Health check 'OK'
+        '400':
+          description: |
+            Bad request - returned when input parameters hasn't been properly formated.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                description: JSON object with error details
+        '401':
+          description: Unauthorized - returned when the user is not authorized to access the resource/perform action
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: Error message
+        '404':
+          description: Not found - returned when the requested resource (file/dictionary) is not found
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: Error message
+        '500':
+          description: Internal server error
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: Error message
+components:
+  schemas:
+    AclChangeResponse:
+      type: object
+      properties:
+        date:
+          type: string
+          description: Date and time of the operation
+          example: '2021-08-25T12:00:00Z'
+        etag:
+          type: string
+          description: Etag of the file/folder
+        last_modified:
+          type: string
+          description: Last modified date and time of the file/folder's Acl
+        client_request_id:
+          type: string
+          description: Client request id
+        request_id:
+          type: string
+          description: Request id
+        version:
+          type: string
+          description: Version
+    AclChangeRecursiveResponse:
+      type: object
+      properties:
+        continuation:
+          type: string
+          description: Continuation token
+        counters:
+          type: object
+          description: Counters
+          properties:
+            directories_successful:
+              type: integer
+              description: Number of directories successfully processed
+            files_successful:
+              type: integer
+              description: Number of files successfully processed
+            failure_count:
+              type: integer
+              description: Number of failures
+  securitySchemes:
+    EntraId:
+      type: openIdConnect
+      openIdConnectUrl: https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration
+    EntraIdToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - EntraId: []
+  - EntraIdToken: []
+

@@ -1,0 +1,74 @@
+[
+    {
+        "sync": "proteomics",
+        "setup": [
+            "main:prot123/090d0ee5-b0c6-4cf2-969c-6179220a3257.sld",
+            "main:prot123/blank01.raw",
+            "main:prot123/Blank_test.raw",
+            "main:prot123/Long_Name-a8d0-487f-abc1-f7521104c6c6.meth",
+            "main:prot123/metadata.xlsx",
+            "main:prot123/metrics.xml",
+            "main:prot123/Prot17_12.raw",
+            "main:prot123/refseq.tsv",
+            "main:prot123/Weird.raw"
+        ],
+        "events": [
+            {
+                "template": "login"
+            },
+            {
+                "template": "list_md5s",
+                "destination": "PROT123"
+            },
+            {
+                "template": "copy",
+                "source": "${MAIN}/prot123/Blank_test.raw",
+                "destination": "PROT123/blanks/Blank_test.raw"
+            },
+            {
+                "template": "copy",
+                "source": "${MAIN}/prot123/blank01.raw",
+                "destination": "PROT123/blanks/blank01.raw"
+            },
+            {
+                "template": "copy",
+                "source": "${MAIN}/prot123/metadata.xlsx",
+                "destination": "PROT123/metadata.xlsx"
+            },
+            {
+                "template": "copy",
+                "source": "${MAIN}/prot123/090d0ee5-b0c6-4cf2-969c-6179220a3257.sld",
+                "destination": "PROT123/other/090d0ee5-b0c6-4cf2-969c-6179220a3257.sld"
+            },
+            {
+                "template": "copy",
+                "source": "${MAIN}/prot123/Long_Name-a8d0-487f-abc1-f7521104c6c6.meth",
+                "destination": "PROT123/other/Long_Name-a8d0-487f-abc1-f7521104c6c6.meth"
+            },
+            {
+                "template": "copy",
+                "source": "${MAIN}/prot123/Prot17_12.raw",
+                "destination": "PROT123/samples/Prot17_12.raw"
+            },
+            {
+                "template": "copy",
+                "source": "${MAIN}/prot123/Weird.raw",
+                "destination": "PROT123/samples/Weird.raw"
+            },
+            {
+                "template": "list_md5s",
+                "destination": "PROT123"
+            },
+            {
+                "template": "logout"
+            }
+        ],
+        "return_code": 0
+    },
+    {
+        "sync": "proteomics",
+        "setup": [],
+        "events": [],
+        "return_code": 0
+    }
+]

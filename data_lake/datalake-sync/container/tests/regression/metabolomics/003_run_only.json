@@ -1,0 +1,11 @@
+[
+    {
+        "sync": "metabolomics",
+        "setup": [
+            "main:RawData_A/20200831/500ug.txt",
+            "main:RawData_A/20200831/50ug.txt"
+        ],
+        "events": [],
+        "return_code": 0
+    }
+]

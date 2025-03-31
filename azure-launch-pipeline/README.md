@@ -1,0 +1,84 @@
+# Using Seqera Platform via API with Python
+
+This repository contains Python scripts that demonstrate how to interact with the [Seqera Platform API](https://docs.seqera.io/platform/24.1/api/overview) using Python. It includes examples of adding a dataset to a workspace and launching a pipeline.
+
+The code shows how you can use the Seqera Platform API with Python. You could use this in a Function-as-a-Service (FaaS) solution or other software to automate pipeline launches.
+
+For additional context, check this [blog post](https://seqera.io/blog/workflow-automation/) which demonstrates using the Seqera Platform API with Python and an AWS Lambda function (note: the post is not recent).
+
+While designed for use with nf-core pipelines, these scripts can be adapted to work with any Nextflow pipeline launched via the Seqera Platform.
+
+## Overview
+
+Seqera comes with a fully featured API that allows you to interact with the platform. This repository demonstrates how to use the API with Python.
+
+There are two scripts in this repository:
+
+- `launch-pipeline.py`: This script launches a pipeline using a pipeline ID.
+- `add-dataset-and-launch-pipeline.py`: This script adds a dataset to a workspace and then launches a pipeline using that dataset as input.
+
+The `launch-pipeline.py` script is a simple example that demonstrates launching a pipeline using a pipeline ID. It requires the pipeline ID, Seqera Platform API endpoint, and access token. You must provide a CSV file which is passed as the `--input` parameter when launching the pipeline.
+
+The `add-dataset-and-launch-pipeline.py` script is a more complex example that demonstrates how to add a dataset to a workspace and then launch a pipeline using that dataset as input. It requires the CSV file path, Azure Storage account URL, Seqera Platform API endpoint, access token, and workspace ID. The script adds the provided CSV file as a dataset to the workspace and then uses it as the `--input` parameter when launching the pipeline.
+
+## Prerequisites
+
+- Python 3.8 or later
+- Seqera Platform account
+- Azure Storage account
+
+## Usage
+
+This Python project has been built with [uv](https://docs.astral.sh/), so you should be able to install the dependencies with:
+
+## Launch Pipeline
+
+### `launch-pipeline.py`
+
+The first script is a simple example of how to launch a pipeline using a pipeline ID. It requires the pipeline ID, Seqera Platform API endpoint, and access token. You must provide a CSV input which is added as the `--input` parameter when launching the pipeline.
+
+The Python script does the following:
+
+- Cleans the CSV file name for use with the output path
+- Fetches the pipeline details from Seqera Platform 
+- Adds the relevant parameters to the pipeline launch payload (input, outdir)
+- Launches the pipeline using the details
+- Prints the workflow ID
+
+The CSV is provided as an input to the Nextflow pipeline using the `--input` parameter with a URL in the format `az://container/path/to/file.csv`. This is a format Nextflow can understand and pull the CSV file directly.
+
+The output is written to the Azure blob storage container in a directory named after the CSV file, making your outputs semi-unique. It is a good practice to create specific output directories for each pipeline launch so that results do not get overwritten.
+
+### `add-dataset-and-launch-pipeline.py`
+
+The datasets feature in Seqera Platform allows you to add flat files such as CSVs to a workspace with audit logging and provenance. You can upload new versions of datasets while maintaining version history, providing better traceability compared to using CSVs directly from storage containers.
+
+This script demonstrates how to use the datasets feature.
+
+The Python script does the following:
+
+- Adds a new dataset to the workspace or fetches details of an existing dataset, using the cleaned CSV name as the dataset name
+- Uploads the CSV file contents to the Seqera Platform dataset
+- Fetches the pipeline details from Seqera Platform 
+- Adds the relevant parameters to the pipeline launch payload (input, outdir), using the dataset URL as input
+- Launches the pipeline using the details
+- Prints the workflow ID
+
+## Internals
+
+The main scripts are located in the root directory:
+
+- `launch-pipeline.py`: A script for launching pipelines
+- `add-dataset-and-launch-pipeline.py`: A script for adding datasets and launching pipelines
+
+The `seqera` directory contains the Python code for interacting with the Seqera Platform API:
+
+- `datasets.py`: Code for managing datasets, including adding datasets to workspaces and uploading CSV contents. Uses the Azure Python SDK for blob storage operations.
+- `pipeline.py`: Code for launching pipelines using pipeline IDs.
+- `seqera.py`: Core functionality for making requests to the Seqera Platform API.
+- `utils.py`: Utility functions for cleaning CSV filenames.
+
+Additional utility files:
+
+- `pyproject.toml`: Package dependencies managed by `uv`
+- `uv.lock`: Lock file generated by `uv` to ensure reproducible installations

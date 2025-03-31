@@ -1,0 +1,84 @@
+[
+    {
+        "sync": "metabolomics",
+        "setup": [
+            "main:DataProcessingMethod_A/featureQCComponentGroups.csv",
+            "main:DataProcessingMethod_A/featureQCComponents.csv",
+            "main:DataProcessingMethod_A/sequence.csv",
+            "main:DataProcessingMethod_A/traML.csv",
+            "main:RawData_A/20200831/500ug.txt",
+            "main:RawData_A/20200831/50ug.txt"
+        ],
+        "events": [
+            {
+                "template": "login"
+            },
+            {
+                "template": "list_md5s",
+                "destination": "A/20200831",
+                "return_code": 1
+            },
+            {
+                "template": "logout"
+            }
+        ],
+        "return_code": 1
+    },
+    {
+        "sync": "metabolomics",
+        "setup": [],
+        "events": [
+            {
+                "template": "login"
+            },
+            {
+                "template": "list_md5s",
+                "destination": "A/20200831"
+            },
+            {
+                "template": "copy",
+                "source": "${MAIN}/DataProcessingMethod_A/featureQCComponentGroups.csv",
+                "destination": "A/20200831/featureQCComponentGroups.csv"
+            },
+            {
+                "template": "copy",
+                "source": "${MAIN}/DataProcessingMethod_A/featureQCComponents.csv",
+                "destination": "A/20200831/featureQCComponents.csv"
+            },
+            {
+                "template": "copy",
+                "source": "${MAIN}/RawData_A/20200831/500ug.txt",
+                "destination": "A/20200831/mzML/500ug.txt"
+            },
+            {
+                "template": "copy",
+                "source": "${MAIN}/RawData_A/20200831/50ug.txt",
+                "destination": "A/20200831/mzML/50ug.txt"
+            },
+            {
+                "template": "copy",
+                "source": "${MAIN}/DataProcessingMethod_A/sequence.csv",
+                "destination": "A/20200831/sequence.csv"
+            },
+            {
+                "template": "copy",
+                "source": "${MAIN}/DataProcessingMethod_A/traML.csv",
+                "destination": "A/20200831/traML.csv"
+            },
+            {
+                "template": "list_md5s",
+                "destination": "A/20200831"
+            },
+            {
+                "template": "logout"
+            }
+        ],
+        "return_code": 0
+    },
+    {
+        "sync": "metabolomics",
+        "setup": [],
+        "events": [],
+        "return_code": 0
+    }
+]

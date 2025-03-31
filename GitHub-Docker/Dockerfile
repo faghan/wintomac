@@ -1,0 +1,35 @@
+FROM mcr.microsoft.com/azure-functions/python:4-python3.11-appservice
+
+ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
+    AzureFunctionsJobHost__Logging__Console__IsEnabled=true
+
+# region Install Nextflow
+# https://www.nextflow.io/docs/latest/install.html
+
+## Install Git
+RUN apt-get update && apt-get install -y git
+## Install Java:
+RUN apt install -y openjdk-17-jre
+
+## Install Nextflow
+RUN cd /usr/local/bin && curl -s https://get.nextflow.io | bash
+
+### Make Nextflow executable:
+RUN cd /usr/local/bin && chmod +x nextflow
+
+# RUN ls /usr/local/bin
+# endregion
+
+# RUN pip install pipenv
+
+# COPY Pipfile* /
+# RUN pipenv install --deploy --system
+
+# COPY . /home/site/wwwroot
+
+# Set the working directory
+WORKDIR /home/site/wwwroot
+
+# Clone the repository from GitHub
+RUN git clone https://github.com/F-Gh2015/Nextflow-Pipeline
+RUN cd /home/site/wwwroot/Nextflow-Pipeline && /usr/local/bin/nextflow run main_test_one.nf -profile az_test -c nextflow_test_one.config -w az://orange
